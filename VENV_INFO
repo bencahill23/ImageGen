@@ -1,0 +1,9 @@
+VENV
+
+genai VENV
+genaivenv
+
+
+cd /.\PROGRAMMING\genai_experimentation\ImageGen
+genaivenv\Scripts\activate.bat
+
