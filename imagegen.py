@@ -6,7 +6,7 @@ import subprocess
 import json
 import os
 
-from tempfile import NamedTemporaryFile
+#from tempfile import NamedTemporaryFile
 import streamlit as st
 
 
@@ -152,7 +152,7 @@ with st.container(border=True):
             st.image(st.session_state['inputImage'])
 
     with col2:
-        st.text_area("Prompt for new Image", height=200, on_change=updatePrompt, key='inputPromptText', value=st.session_state['inputPrompt'])
+        st.text_area("Prompt for new Image", height=200, on_change=updatePrompt, key='inputPromptText')#, value=st.session_state['inputPrompt'])
         st.selectbox("Prompt Examples", [*st.session_state['ExamplePrompts']], key='selectedExample', on_change=loadExamplePrompt)
 
         col1, col2 = st.columns([1, 2],  vertical_alignment='center')
