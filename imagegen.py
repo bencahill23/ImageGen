@@ -73,9 +73,9 @@ def switchImages():
 
 
 def loadExamplePrompts():
-    prompt_paper_damage = "Degrade the quality of the image. Add dust, faded areas, creases, noise. It has been in a pocket for 10 years. Someone once spilled coffee on the image. It was left out in the sun for a month and is more faded. The edges are more creased. Maintain all of the damage in the source image and add more. If there is already damage to the image, use it to create holes, teasr and extra creases. The generated image should be more damaged than the input image. "
+    prompt_paper_damage = "Degrade the quality of the image. Add dust, faded areas, creases, noise. It has been in a pocket for 10 years. Someone once spilled coffee on the image. It was left out in the sun for a month and is more faded. The edges are more creased. Maintain all of the damage in the source image and add more. If there is already damage to the image, use it to create holes, tears and extra creases. The generated image should be more damaged than the input image. "
 
-    promt_expand_drawing = "Using the input image as a source of content and style, complete the image so any head have full figures, and are placed in situations relevant to their appearance. Render other characters in the same style and have them interact with the person in the image."
+    promt_expand_drawing = "Using the input image as a source of content and style, complete the image so any head have full figures, and are placed in situations relevant to their appearance. Render other characters in the same style and have them interact with the person in the image. Provide narural lighting that emphasises the medium."
 
     promtp_expand_drawing_photoreal = "Render a shallow-depth of field, moody black and white photograph of the following scene. Using the input image as a source of content only, complete the image so any head have full figures, and are paced in situations relevant to their appearance. Render other characters in the same style and have them interact with the people in the image. Establish depth-of-field using objects and people in the foreground and background."
 
@@ -112,7 +112,7 @@ def loadExamplePrompt():
     updatePrompt()
 
 def selectFolder():
-    result = subprocess.run([f"{sys.executable}", "folder_selector.py"], capture_output=True, text=True)
+    result = subprocess.run([f"{sys.executable}", "folder_selector.py"], capture_output=True)#, text=True)
     if result.returncode == 0:
         folder_data = json.loads(result.stdout)
         folder_path = folder_data.get("folder_path")
@@ -148,8 +148,8 @@ client = initGenAI()
 
 st.title("GenAI Playground")
 with st.container(border=True):
-    st.header("Image Generation from File and Prompt")
-    source_image = st.file_uploader("Choose a file", type=["jpg", "jpeg", "png"], width="stretch", key='inputImageK', on_change=loadImage)
+    st.header("Image Gen from File + Prompt")
+    source_image = st.file_uploader("Choose an image file (.jpg, .png)", type=["jpg", "jpeg", "png"], width="stretch", key='inputImageK', on_change=loadImage)
 
     col1, col2 = st.columns([2, 3],  vertical_alignment='center')
     
@@ -158,7 +158,7 @@ with st.container(border=True):
             st.image(st.session_state['inputImage'])
 
     with col2:
-        st.text_area("Prompt for new Image", height=200, on_change=updatePrompt, key='inputPromptText')#, value=st.session_state['inputPrompt'])
+        st.text_area("Prompt", height=200, on_change=updatePrompt, key='inputPromptText')#, value=st.session_state['inputPrompt'])
         st.selectbox("Prompt Examples", [*st.session_state['ExamplePrompts']], key='selectedExample', on_change=loadExamplePrompt)
 
         col1, col2 = st.columns([1, 2],  vertical_alignment='center')
