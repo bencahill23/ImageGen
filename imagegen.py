@@ -3,16 +3,19 @@ from google.genai import types
 from PIL import Image
 from io import BytesIO
 import subprocess
+import sys
 import json
 import os
 
-#from tempfile import NamedTemporaryFile
 import streamlit as st
+
+st.set_page_config(layout="centered")
+
 
 
 # TODOS
 # Save Prompts / File handling + menus
-# Save Images to new folders
+# Recursion
 # Batch select filenames
 
 def initSession():
@@ -30,12 +33,12 @@ def initSession():
         "Empty" : 0
         }
 
-@st.cache_resource
+@st.cache_resource(show_spinner=False)
 def initGenAI():
     return genai.Client(api_key= st.secrets["GOOGLE_API_KEY"])
     
 
-@st.cache_data
+@st.cache_data(show_spinner=False)
 def generateImage(input_image, prompt):
     # check if the image is imported or being recursed
     try:
@@ -95,8 +98,11 @@ def loadImage():
 def saveImage():
     fn = st.session_state['savefilename'] + ".png"
     fullpath = st.session_state["saveFilePath"]+ "/" +fn
-    #print(fullpath)
-    st.session_state['outputImage'].save(fullpath)
+    try:
+        st.session_state['outputImage'].save(fullpath)
+        st.success(fn+" Saved")
+    except:
+        st.error("Error saving file")
 
 def updatePrompt():
     st.session_state['inputPrompt'] = st.session_state['inputPromptText'] 
@@ -106,7 +112,7 @@ def loadExamplePrompt():
     updatePrompt()
 
 def selectFolder():
-    result = subprocess.run(["python", "folder_selector.py"], capture_output=True, text=True)
+    result = subprocess.run([f"{sys.executable}", "folder_selector.py"], capture_output=True, text=True)
     if result.returncode == 0:
         folder_data = json.loads(result.stdout)
         folder_path = folder_data.get("folder_path")
